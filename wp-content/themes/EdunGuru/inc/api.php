@@ -44,7 +44,18 @@ class API {
 
     function getCourseChapters($id = NULL) {
         $courseId = is_null($id) ? $_REQUEST['id'] : $id;
-        return $this->getResults(['meta_query' => [['key' => 'course_field', 'value' => $courseId]], 'post_type' => 'chapters']);
+        $data = $this->getResults(['meta_query' => [['key' => 'course_field', 'value' => $courseId]], 'post_type' => 'chapters']);
+        foreach ($data as $key => $value) {
+            $args = (['meta_query' => [['key' => 'chapter_field', 'value' => $value['id']]], 'post_type' => 'questions']);
+            $wp_query = new WP_Query($args);
+            $count =  $wp_query->post_count;
+            $data[$key]['count'] = $count;
+        }
+        return $data;
+    }
+    
+    function getDifficultyLevel(){
+      return $getData = get_field_object('Difficulty_Level',309);
     }
 
     function getChapter($id = NULL) {
@@ -56,7 +67,14 @@ class API {
 
     function getChapterTopics($id = NULL) {
         $chapterId = is_null($id) ? $_REQUEST['id'] : $id;
-        return $this->getResults(['meta_query' => [['key' => 'chapter_field', 'value' => $chapterId]], 'post_type' => 'topics']);
+        $data =  $this->getResults(['meta_query' => [['key' => 'chapter_field', 'value' => $chapterId]], 'post_type' => 'topics']);
+        foreach ($data as $key => $value) {
+            $args = (['meta_query' => [['key' => 'topic_field', 'value' => $value['id']]], 'post_type' => 'questions']);
+            $wp_query = new WP_Query($args);
+            $count =  $wp_query->post_count;
+            $data[$key]['count'] = $count;
+        }
+        return $data;
     }
 
     function getTopicQuestions($topics = NULL, $noOfQns = NULL, $noOfMarks = NULL, $typeOfQns = NULL) {
@@ -121,6 +139,7 @@ class API {
         endif;
         return $image['0'];
     }
+    
 
     function getPostyByCourseCat() {
 
@@ -138,7 +157,18 @@ class API {
         exit;
     }
 
-    function testing() {
+    function testing1() {
+        return   get_field_object('Difficulty_Level',309);
+        $string = html_entity_decode(strip_tags(get_field('question', 308)));
+        return $string;
+        $my_post = array(
+            'ID' => 308,
+            'post_title' => $string,
+        );
+
+// Update the post into the database
+        return wp_update_post($my_post);
+        return update_field('post_title', 'Euclids division algorithm is used to find ……… of given positive integers.', 308);
         echo "<pre>";
         print_r($this->getResults(['post_type' => 'topics']));
         exit;

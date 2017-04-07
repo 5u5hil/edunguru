@@ -1,8 +1,9 @@
 <?php
 trait Questions{
     function testingQues(){
-        echo "<pre>";
-        print_r("Hellloooooooooooo");
+      
+             $args=['ID'=>308,'post_title'=> "Hello"];
+            wp_update_post($args);exit;
         exit;
     }
 }

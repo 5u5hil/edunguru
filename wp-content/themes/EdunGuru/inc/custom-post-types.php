@@ -143,7 +143,6 @@ function questions() {
         'show_in_admin_bar' => true,
         'capability_type' => 'post',
         'supports' => [
-            'title',
             'author']
     ];
     register_post_type('questions', $args);

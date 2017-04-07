@@ -155,13 +155,13 @@ function questionsFilter() {
     //print_r($field);
     sort($collectArray);
     //print_r(array_unique($collectArray));
-    print_r(createOptionGroup($collectArray,$getSelectedVal));
+    print_r(createOptionGroup($collectArray, $getSelectedVal));
 
 
     exit;
 }
 
-function createOptionGroup($collectArray,$getSelectedVal) {
+function createOptionGroup($collectArray, $getSelectedVal) {
     $getArray = combineValuesWithSameKey($collectArray);
     foreach ($getArray as $getGroupItem):
         $getGroupKey = key($getGroupItem[0]);
@@ -170,7 +170,7 @@ function createOptionGroup($collectArray,$getSelectedVal) {
         foreach ($getGroupItem as $getMainItems):
             $getItemValue = array_values($getMainItems[$getGroupKey])[0];
             $getItemKey = key($getMainItems[$getGroupKey]);
-             $selectVal = in_array($getItemKey, $getSelectedVal) ? 'selected' : '';
+            $selectVal = in_array($getItemKey, $getSelectedVal) ? 'selected' : '';
             $createOption.="<option $selectVal value='$getItemKey'>$getItemValue</option>";
         endforeach;
         $createOption.="</optgroup>";
@@ -202,3 +202,12 @@ function getTopicName() {
 add_action('wp_ajax_questionsFilter', 'questionsFilter');
 
 
+add_action('save_post', 'updateQuestionTitle');
+
+function updateQuestionTitle($postId) {
+global $wpdb;
+    if (get_post_type($postId) == 'questions' && $_SERVER['REQUEST_METHOD'] == 'POST'):
+        $newTitle=  strip_tags($_POST['acf']['field_58ca56734e401']);
+        $wpdb->get_results("UPDATE wp_posts SET post_title='$newTitle' WHERE ID= $postId ");
+    endif;
+}

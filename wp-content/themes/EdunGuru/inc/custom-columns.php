@@ -8,8 +8,7 @@ function my_edit_questions_columns($columns) {
 
     $columns = array(
         'cb' => '<input type="checkbox" />',
-        'title' => __('Title'),
-        'question' => __('Question'),
+        'title' => __('Question'),
         'topic_field' => __('Topic'),
         'chapter_field' => __('Chapter'),
         'course_field' => __('Course'),
@@ -40,11 +39,6 @@ function my_manage_questions_columns($column, $post_id) {
             // return 1;
             break;
 
-        case 'question':
-            $question = get_post_meta($post_id, 'question', true);
-            echo $question;
-            // return 1;
-            break;
         case 'course_category':
             $course_cat = get_the_terms($course_field, 'course-categories');
             echo $course_cat[0]->name;
@@ -55,12 +49,6 @@ function my_manage_questions_columns($column, $post_id) {
             break;
     }
 }
-
-function my_manage_questions_posts_column($column, $post_id){
-
-}
-add_action('manage_questions_posts_columns','my_manage_questions_posts_column',10,2);
-
 
 // Course custom field  ------------------------------------- Bhavana
 
